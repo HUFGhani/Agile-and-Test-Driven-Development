@@ -21,6 +21,7 @@ def mode(X):
         return []
 
     d = {}
+
     for item in X:
         if d.has_key(item):
             d[item] += 1
@@ -28,8 +29,13 @@ def mode(X):
             d[item] = 1
 
     m = (0, 0)
+    k=[]
     for key in d.keys():
         if d[key] > m[1]:
             m = (key, d[key])
+            k=[key]
+        elif(d[key]==m[1]):
+            m=(key,d[key])
+            k.append(key)
 
-    return [m[0]]
+    return k
