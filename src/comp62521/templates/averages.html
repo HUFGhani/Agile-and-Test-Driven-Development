@@ -4,8 +4,8 @@
 <h1>{{ args.title }}</h1>
 {% for table in args.tables %}
 <h2>{{ table.title }}</h2>
-<table>
-  <thead class="sortable">
+<table class="sortable">
+  <thead>
     <tr>
       {% for column in table.header %}
         <th>{{ column }}</th>
