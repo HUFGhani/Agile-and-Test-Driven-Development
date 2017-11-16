@@ -109,8 +109,12 @@ class TestDatabase(unittest.TestCase):
             "header and data column size doesn't match")
         self.assertEqual(len(data), 2,
             "incorrect number of authors")
-        self.assertEqual(data[0][-1], 1,
+        self.assertEqual(data[0][-3], 1,
             "incorrect total")
+        self.assertEqual(data[0][-2], 1,
+            "incorrect number of first author")
+        self.assertEqual(data[0][-1], 0,
+            "incorrect number of last author")
 
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
