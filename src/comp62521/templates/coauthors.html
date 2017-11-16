@@ -21,7 +21,7 @@ Publication type:
 
 <h1>{{ args.pub_str }} in {{ args.start_year }} {% if args.start_year != args.end_year %} - {{ args.end_year }}{% endif %}</h1>
 
-<table>
+<table class="sortable">
   <thead>
     <tr>
     {% for column in args.data[0] %}
