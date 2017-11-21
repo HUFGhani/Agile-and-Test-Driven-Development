@@ -116,6 +116,13 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[0][-1], 0,
             "incorrect number of last author")
 
+    def test_get_search_name(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        self.assertEqual(db.get_search_name(''), (0, 0, 0, 0, 0, 0, 0, 0))
+        self.assertEqual(db.get_search_name('aaa'), 'The author you entered does not exist in database')
+        self.assertEqual(db.get_search_name('Piero Fraternali'), (49, 29, 18, 1, 1, 49, 0, 7))
+
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
