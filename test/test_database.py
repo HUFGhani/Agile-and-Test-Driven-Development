@@ -109,12 +109,27 @@ class TestDatabase(unittest.TestCase):
             "header and data column size doesn't match")
         self.assertEqual(len(data), 2,
             "incorrect number of authors")
-        self.assertEqual(data[0][-3], 1,
+        self.assertEqual(data[0][-4], 1,
             "incorrect total")
-        self.assertEqual(data[0][-2], 1,
+        self.assertEqual(data[0][-3], 1,
             "incorrect number of first author")
-        self.assertEqual(data[0][-1], 0,
+        self.assertEqual(data[0][-2], 0,
             "incorrect number of last author")
+        self.assertEqual(data[0][-1], 0,
+            "incorrect number of solo author")
+
+    def test_solo_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-2.xml")))
+        header, data = db.get_publications_by_author()
+        self.assertEqual(data[0][-1], 1,
+            "incorrect number of solo author1")
+        self.assertEqual(data[1][-1], 1,
+            "incorrect number of solo author2")
+        self.assertEqual(data[2][-1], 0,
+            "incorrect number of solo author3")
+        self.assertEqual(data[3][-1], 0,
+            "incorrect number of solo author4")
 
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
