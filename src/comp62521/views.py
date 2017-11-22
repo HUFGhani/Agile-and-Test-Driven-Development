@@ -117,3 +117,38 @@ def showPublicationSummary(status):
         args["data"] = db.get_author_totals_by_year()
 
     return render_template('statistics_details.html', args=args)
+
+
+
+
+
+@app.route("/search_name")
+def showSerchName():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"search_name"}
+    args["title"] = "search author"
+    author = str(request.args.get("author"))
+    error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last = db.get_search_name(author)
+    if error_message != 0:
+        args["author"]= 'None search result for ' + author + '. Please check the name and try again!'
+        args["allpublications"] = 'NULL'
+        args["conference_papers"] = 'NULL'
+        args["journal_articles"] = 'NULL'
+        args["book_chapters"] = 'NULL'
+        args["books"] = 'NULL'
+        args["co_authors"] = 'NULL'
+        args["first"] = 'NULL'
+        args["last"] = 'NULL'
+    else:
+        args["author"] = author
+        args["allpublications"] = allpublications
+        args["conference_papers"] = conference_papers
+        args["journal_articles"] = journal_articles
+        args["book_chapters"] = book_chapters
+        args["books"] = books
+        args["co_authors"] = co_authors
+        args["first"] = first
+        args["last"] = last
+
+    return render_template("serch_name.html", args=args)

@@ -151,5 +151,13 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[0][1], 2,
             "incorrect number of authors in result")
 
+    def test_get_search_name(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        self.assertEqual(db.get_serch_name(''), (0, 0, 0, 0, 0, 0, 0, 0))
+        self.assertEqual(db.get_serch_name('aaaa'), (0, 0, 0, 0, 0, 0, 0, 0))
+        self.assertEqual(db.get_serch_name('Piero Fraternali'),(49,29,18,1,1,49,0,7))
+
+
 if __name__ == '__main__':
     unittest.main()

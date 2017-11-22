@@ -265,6 +265,57 @@ class Database:
         data = [ [y] + ystats[y] + [sum(ystats[y])] for y in ystats ]
         return (header, data)
 
+    def get_search_name(self,author):
+        allpublications=0
+        conference_papers=0
+        journal_articles=0
+        book_chapters=0
+        books=0
+        co_authors=0
+        first=0
+        last=0
+        error_message=0
+
+        astats = [[0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
+        coauthors = {}
+        for p in self.publications:
+            for a in p.authors:
+                astats[a][p.pub_type+1] += 1
+
+                if a == p.authors[0]:
+                    astats[a][6] += 1
+                if a == p.authors[-1]:
+                    astats[a][7] += 1
+
+                for a2 in p.authors:
+                    if a != a2:
+                        try:
+                            coauthors[a].add(a2)
+                        except KeyError:
+                            coauthors[a] = set([a2])
+                astats[a][5]=len(coauthors[a])
+
+            for a in p.authors:
+                astats[a][0]=sum(astats[a][1:5])
+
+        data=[ astats[i] for i in range(len(astats))]
+        for i in range(len(data)):
+            if self.authors[i].name == author:
+                allpublications = data[i][0]
+                conference_papers = data[i][1]
+                journal_articles = data[i][2]
+                book_chapters = data[i][3]
+                books = data[i][4]
+                co_authors = data[i][5]
+                first = data[i][6]
+                last = data[i][7]
+                error_message = 0
+                break
+            else:
+                error_message = 'The author you entered does not exist in database'
+
+        return (error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last)
+
     def get_average_publications_per_author_by_year(self, av):
         header = ("Year", "Conference papers",
             "Journals", "Books",
