@@ -249,6 +249,7 @@ class Database:
             for y in ystats ]
         return (header, data)
 
+
     def get_publications_by_year(self):
         header = ("Year", "Number of conference papers",
             "Number of journals", "Number of books",

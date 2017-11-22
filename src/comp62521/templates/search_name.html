@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<h1>{{ args.title }}</h1>
+
+
+<form action="/search_name" method="get" data-ajax="false" onSubmit="validateForm(this)">
+
+Insert name: <input type="text" name="author" value="">
+
+
+<input type="submit" value="Submit" ><br>
+The overall number of publications = {{ args.allpublications }}<br>
+The number of conference papers = {{ args.conference_papers }}<br>
+The number of journal articles = {{ args.journal_articles }}<br>
+The number of book chapters = {{ args.book_chapters }}<br>
+The number of books = {{ args.books }}<br>
+The number of co-authors = {{ args.co_authors }}<br>
+The number of times (overall) an author appears first on a paper = {{ args.first }}<br>
+The number of times (overall) an author appears last on a paper = {{ args.last }}<br>
+</form>
+
+
+<script>
+function validateForm(form){
+  author = form["author"].value;
+  if (author==""){
+    alert("Please input an author name");
+    return false;
+  }
+
+  return true;
+}
+
+</script>
+
+
+{% endblock %}
