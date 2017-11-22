@@ -124,12 +124,13 @@ class TestDatabase(unittest.TestCase):
         header, data = db.get_publications_by_author()
         self.assertEqual(data[0][-1], 1,
             "incorrect number of solo author1")
-        self.assertEqual(data[1][-1], 1,
+        self.assertEqual(data[3][-1], 1,
             "incorrect number of solo author2")
-        self.assertEqual(data[2][-1], 0,
+        self.assertEqual(data[1][-1], 0,
             "incorrect number of solo author3")
-        self.assertEqual(data[3][-1], 0,
+        self.assertEqual(data[2][-1], 0,
             "incorrect number of solo author4")
+
 
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
