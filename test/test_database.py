@@ -75,7 +75,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_publication_summary()
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data[0]), 6,
             "incorrect number of columns in data")
@@ -90,7 +90,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "three-authors-and-three-publications.xml")))
         header, data = db.get_average_authors_per_publication_by_author(database.Stat.MEAN)
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data), 3,
             "incorrect average of number of conference papers")
@@ -105,7 +105,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_publications_by_author()
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data), 2,
             "incorrect number of authors")
@@ -128,7 +128,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_average_publications_per_author_by_year(database.Stat.MEAN)
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data), 1,
             "incorrect number of rows")
@@ -150,7 +150,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_publications_by_author()
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data), 2,
             "incorrect number of authors")
@@ -180,7 +180,7 @@ class TestDatabase(unittest.TestCase):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
         header, data = db.get_author_totals_by_year()
-        self.assertEqual(len(header), len(data[0]),
+        self.assertEqual(len(header)-1, len(data[0]),
             "header and data column size doesn't match")
         self.assertEqual(len(data), 1,
             "incorrect number of rows")
