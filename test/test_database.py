@@ -138,6 +138,23 @@ class TestDatabase(unittest.TestCase):
             "incorrect number of rows")
         self.assertEqual(data[0][0], 9999,
             "incorrect year in result")
+            
+    def test_get_publications_by_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        header, data = db.get_publications_by_author()
+        self.assertEqual(len(header), len(data[0]),
+            "header and data column size doesn't match")
+        self.assertEqual(len(data), 2,
+            "incorrect number of authors")
+        self.assertEqual(data[0][-4], 1,
+            "incorrect total")
+        self.assertEqual(data[0][-3], 1,
+            "incorrect number of first author")
+        self.assertEqual(data[0][-2], 0,
+            "incorrect number of last author")
+        self.assertEqual(data[0][-1], 0,
+            "incorrect number of solo author")
 
     def test_get_author_totals_by_year(self):
         db = database.Database()
