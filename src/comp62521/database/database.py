@@ -210,7 +210,7 @@ class Database:
 
 
     def get_publications_by_author(self):
-        header = ("Author", "Number of conference papers",
+        header = ("Author","Surname","Number of conference papers",
             "Number of journals", "Number of books",
             "Number of book chapers", "Total","Number of the first author","Number of the last author","Solo Author")
 
