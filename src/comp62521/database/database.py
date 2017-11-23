@@ -223,7 +223,7 @@ class Database:
                     astats[a][4] += 1
                 if a == p.authors[-1]:
                     astats[a][5] += 1
-                if len(p.authors) == 1:
+                if a == p.authors[0] and len(p.authors) == 1:
                     astats[a][6] += 1
 
         data = [ [self.authors[i].name] + astats[i][0:4] + [sum(astats[i][0:4])] + astats[i][4:7]

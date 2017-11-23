@@ -109,27 +109,20 @@ class TestDatabase(unittest.TestCase):
             "header and data column size doesn't match")
         self.assertEqual(len(data), 2,
             "incorrect number of authors")
-        self.assertEqual(data[0][-4], 1,
-            "incorrect total")
         self.assertEqual(data[0][-3], 1,
+            "incorrect total")
+        self.assertEqual(data[0][-2], 1,
             "incorrect number of first author")
-        self.assertEqual(data[0][-2], 0,
-            "incorrect number of last author")
         self.assertEqual(data[0][-1], 0,
-            "incorrect number of solo author")
+            "incorrect number of last author")
 
-    def test_solo_author(self):
+    def test_get_search_name(self):
         db = database.Database()
-        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-2.xml")))
-        header, data = db.get_publications_by_author()
-        self.assertEqual(data[0][-1], 1,
-            "incorrect number of solo author1")
-        self.assertEqual(data[1][-1], 1,
-            "incorrect number of solo author2")
-        self.assertEqual(data[2][-1], 0,
-            "incorrect number of solo author3")
-        self.assertEqual(data[3][-1], 0,
-            "incorrect number of solo author4")
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        self.assertEqual(db.get_search_name('aaa'), ('The author you entered does not exist in database', 0, 0, 0, 0, 0, 0, 0, 0))
+        self.assertEqual(db.get_search_name('Yoonkyong Lee'), (0, 1, 1, 0, 0, 0, 4, 0, 0))
+        self.assertEqual(db.get_search_name('Daniele Braga'), (0, 30, 20, 10, 0, 0, 43, 14, 0))
+        self.assertEqual(db.get_search_name('Piero Fraternali'), (0, 49, 29, 18, 1, 1, 49, 0, 7))
 
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
@@ -152,6 +145,36 @@ class TestDatabase(unittest.TestCase):
             "incorrect number of rows")
         self.assertEqual(data[0][0], 9999,
             "incorrect year in result")
+
+    def test_get_publications_by_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
+        header, data = db.get_publications_by_author()
+        self.assertEqual(len(header), len(data[0]),
+            "header and data column size doesn't match")
+        self.assertEqual(len(data), 2,
+            "incorrect number of authors")
+        self.assertEqual(data[0][-4], 1,
+            "incorrect total")
+        self.assertEqual(data[0][-3], 1,
+            "incorrect number of first author")
+        self.assertEqual(data[0][-2], 0,
+            "incorrect number of last author")
+        self.assertEqual(data[0][-1], 0,
+            "incorrect number of solo author")
+
+    def test_solo_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-2.xml")))
+        header, data = db.get_publications_by_author()
+        self.assertEqual(data[0][-1], 1,
+            "incorrect number of solo author1")
+        self.assertEqual(data[3][-1], 1,
+            "incorrect number of solo author2")
+        self.assertEqual(data[1][-1], 0,
+            "incorrect number of solo author3")
+        self.assertEqual(data[2][-1], 0,
+            "incorrect number of solo author4")
 
     def test_get_author_totals_by_year(self):
         db = database.Database()
