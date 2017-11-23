@@ -3,7 +3,8 @@
 
   <head>
     <title>{% block title %}{% endblock %}</title>
-    <script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+ <!--<script src="https://kryogenix.org/code/browser/sorttable/sorttable.js"></script>-->
+  <script src="{{ url_for('static', filename='js/sort.js') }}"></script>
   </head>
 
   <body>
@@ -20,5 +21,6 @@
         {% block content %}{% endblock %}
       </div>
     </div>
+
   </body>
 </html>
