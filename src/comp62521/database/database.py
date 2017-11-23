@@ -89,7 +89,7 @@ class Database:
         return (header, data)
 
     def get_average_authors_per_publication(self, av):
-        header = ("Conference Paper", "Journal", "Book", "Book Chapter", "All Publications")
+        header = ("Conference Paper", "Conference Paper", "Journal", "Book", "Book Chapter", "All Publications")
 
         auth_per_pub = [[], [], [], []]
 
@@ -102,7 +102,7 @@ class Database:
         return (header, data)
 
     def get_average_publications_per_author(self, av):
-        header = ("Conference Paper", "Journal", "Book", "Book Chapter", "All Publications")
+        header = ("Conference Paper","Conference Paper", "Journal", "Book", "Book Chapter", "All Publications")
 
         pub_per_auth = np.zeros((len(self.authors), 4))
 
@@ -116,7 +116,7 @@ class Database:
         return (header, data)
 
     def get_average_publications_in_a_year(self, av):
-        header = ("Conference Paper",
+        header = ("Conference Paper","Conference Paper",
             "Journal", "Book", "Book Chapter", "All Publications")
 
         ystats = np.zeros((int(self.max_year) - int(self.min_year) + 1, 4))
@@ -130,7 +130,7 @@ class Database:
         return (header, data)
 
     def get_average_authors_in_a_year(self, av):
-        header = ("Conference Paper",
+        header = ("Conference Paper","Conference Paper",
             "Journal", "Book", "Book Chapter", "All Publications")
 
         yauth = [ [set(), set(), set(), set(), set()] for _ in range(int(self.min_year), int(self.max_year) + 1) ]
@@ -148,7 +148,7 @@ class Database:
         return (header, data)
 
     def get_publication_summary_average(self, av):
-        header = ("Details", "Conference Paper",
+        header = ("Details","Details", "Conference Paper",
             "Journal", "Book", "Book Chapter", "All Publications")
 
         pub_per_auth = np.zeros((len(self.authors), 4))
@@ -172,7 +172,7 @@ class Database:
         return (header, data)
 
     def get_publication_summary(self):
-        header = ("Details", "Conference Paper",
+        header = ("Details","Details", "Conference Paper",
             "Journal", "Book", "Book Chapter", "Total")
 
         plist = [0, 0, 0, 0]
@@ -191,7 +191,7 @@ class Database:
         return (header, data)
 
     def get_average_authors_per_publication_by_author(self, av):
-        header = ("Author", "Number of conference papers",
+        header = ("Author","Author", "Number of conference papers",
             "Number of journals", "Number of books",
             "Number of book chapers", "All publications")
 
@@ -231,7 +231,7 @@ class Database:
         return (header, data)
 
     def get_average_authors_per_publication_by_year(self, av):
-        header = ("Year", "Conference papers",
+        header = ("Year","Year" "Conference papers",
             "Journals", "Books",
             "Book chapers", "All publications")
 
@@ -252,7 +252,7 @@ class Database:
         return (header, data)
 
     def get_publications_by_year(self):
-        header = ("Year", "Number of conference papers",
+        header = ("Year","Year" "Number of conference papers",
             "Number of journals", "Number of books",
             "Number of book chapers", "Total")
 
@@ -319,7 +319,7 @@ class Database:
         return (error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last)
 
     def get_average_publications_per_author_by_year(self, av):
-        header = ("Year", "Conference papers",
+        header = ("Year","Year", "Conference papers",
             "Journals", "Books",
             "Book chapers", "All publications")
 
@@ -342,7 +342,7 @@ class Database:
         return (header, data)
 
     def get_author_totals_by_year(self):
-        header = ("Year", "Number of conference papers",
+        header = ("Year","Year", "Number of conference papers",
             "Number of journals", "Number of books",
             "Number of book chapers", "Total")
 
