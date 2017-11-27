@@ -189,6 +189,55 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data[0][1], 2,
             "incorrect number of authors in result")
 
+    def test_get_author_publication(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        # Test conference paper
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[0][-3], 7,"incorrect number of sole author1 in conference paper")
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[0][-2], 28,"incorrect number of first author1 in conference paper")
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[0][-1], 10,"incorrect number of last author1 in conference paper")
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[1][-3], 0, "incorrect number of sole author2 in conference paper")
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[1][-2], 0, "incorrect number of first author2 in conference paper")
+        header, data = db.get_author_publication(0)
+        self.assertEqual(data[1][-1], 3, "incorrect number of last author2 in conference paper")
+
+        # Test journal article
+        header, data = db.get_author_publication(1)
+        self.assertEqual(data[0][-3], 0, "incorrect number of sole author1 in journal article")
+        header, data = db.get_author_publication(1)
+        self.assertEqual(data[0][-2], 43, "incorrect number of first author1 in journal article")
+        header, data = db.get_author_publication(1)
+        self.assertEqual(data[0][-1], 10, "incorrect number of last author1 in journal article")
+
+        # Test Book
+        header, data = db.get_author_publication(2)
+        self.assertEqual(data[0][-3], 0, "incorrect number of sole author1 in book")
+        header, data = db.get_author_publication(2)
+        self.assertEqual(data[0][-2], 3 , "incorrect number of first author1 in book")
+        header, data = db.get_author_publication(2)
+        self.assertEqual(data[0][-1], 0, "incorrect number of last author1 in book")
+
+       # Test book chapter
+        header, data = db.get_author_publication(3)
+        self.assertEqual(data[0][-3], 1, "incorrect number of sole author1 in book chapter")
+        header, data = db.get_author_publication(3)
+        self.assertEqual(data[0][-2], 4, "incorrect number of first author1 in book chapter")
+        header, data = db.get_author_publication(3)
+        self.assertEqual(data[0][-1], 5, "incorrect number of last author1 in book chapter")
+
+        # Test all publications
+        header, data = db.get_author_publication(4)
+        self.assertEqual(data[0][-3], 8, "incorrect number of sole author1 in all publications ")
+        header, data = db.get_author_publication(4)
+        self.assertEqual(data[0][-2], 78, "incorrect number of first author1 in all publications")
+        header, data = db.get_author_publication(4)
+        self.assertEqual(data[0][-1], 25, "incorrect number of last author1 in all publications")
+
 if __name__ == '__main__':
     unittest.main()
 
