@@ -152,3 +152,25 @@ def showSerchName():
         args["last"] = last
 
     return render_template("serch_name.html", args=args)
+
+
+
+@app.route("/search_type")
+def showAuthorsPublication():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    PUB_TYPES = ["Conference Papers", "Journals", "Books", "Book Chapters", "All Publications"]
+    args = {"dataset":dataset, "id":"search_type"}
+    args["title"] = "Search Author by Publication Type"
+
+
+    pub_type = 4
+    if "pub_type" in request.args:
+        pub_type = int(request.args.get("pub_type"))
+
+    args["data"] = db.get_author_publication(pub_type)
+
+    args["pub_type"] = pub_type
+
+    args["pub_str"] = PUB_TYPES[pub_type]
+    return render_template("search_type.html", args=args)
