@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<style>
+table#details{
+    width: 100%;    
+    text-align: mid;
+}
+</style>
+<h1>{{ args.title }}</h1>
+
+
+<form action="/author_details" method="get" data-ajax="false" onSubmit="validateForm(this)">
+
+Insert name: <input type="text" name="author" value="">
+
+
+<input type="submit" value="Submit" ><br>
+search result = {{args.author}}<br>
+    <table id="details">
+        <tr>
+            <th>All publications</th>
+            <th>Conference Papers</th>
+            <th>Journal Articles</th>
+            <th>Books</th>
+            <th>Book Chapters</th>
+        </tr>
+        <tr>
+            <td>{{ args.allpublications }}</td>
+            <td>{{ args.conference_papers }}</td>
+            <td>{{ args.journal_articles }}</td>
+            <td>{{ args.books }}</td>
+            <td>{{ args.book_chapters }}</td>
+        </tr>
+    </table>
+
+    <table id="details">
+        <tr>
+            <th>All publications First</th>
+            <th>Conference Papers First</th>
+            <th>Journal Articles First</th>
+            <th>Books First</th>
+            <th>Book Chapters First</th>
+        </tr>
+        <tr>
+            <td>{{ args.allpublications_first }}</td>
+            <td>{{ args.conference_papers_first }}</td>
+            <td>{{ args.journal_articles_first }}</td>
+            <td>{{ args.books_first }}</td>
+            <td>{{ args.book_chapters_first }}</td>
+        </tr>
+    </table>
+
+    <table id="details">
+        <tr>
+            <th>All publications Last</th>
+            <th>Conference Papers Last</th>
+            <th>Journal Articles Last</th>
+            <th>Books Last</th>
+            <th>Book Chapters Last</th>
+        </tr>
+        <tr>
+            <td>{{ args.allpublications_last }}</td>
+            <td>{{ args.conference_papers_last }}</td>
+            <td>{{ args.journal_articles_last }}</td>
+            <td>{{ args.books_last }}</td>
+            <td>{{ args.book_chapters_last }}</td>
+        </tr>
+    </table>
+
+    <table id="details">
+        <tr>
+            <th>All publications Solo</th>
+            <th>Conference Papers Solo</th>
+            <th>Journal Articles Solo</th>
+            <th>Books Solo</th>
+            <th>Book Chapters Solo</th>
+        </tr>
+        <tr>
+            <td>{{ args.allpublications_solo }}</td>
+            <td>{{ args.conference_papers_solo }}</td>
+            <td>{{ args.journal_articles_solo }}</td>
+            <td>{{ args.books_solo }}</td>
+            <td>{{ args.book_chapters_solo }}</td>
+        </tr>
+    </table>
+
+Co-authors = {{ args.co_authors }}<br>
+</form>
+
+
+<script>
+function validateForm(form){
+  author = form["author"].value;
+  if (author==""){
+    alert("Please input author's name");
+    return false;
+  }
+  return true;
+}
+
+</script>
+
+
+{% endblock %}
