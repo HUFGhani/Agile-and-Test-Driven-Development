@@ -2,7 +2,7 @@ var name;
 
 $(document).ready(function() {
     // find full name, get surname and add it to table as second column
-
+    var index = $('#example').find('th:last').index();
     $('#example td:first-child').each(function() {
         name = preProcess($(this).text());
         $('<td>'+ name +'</td>').insertAfter($(this));
@@ -17,7 +17,10 @@ $(document).ready(function() {
                 'searchable': false
             },
         ],
-
+        // "order": [ index, "asc" ]
+        "orderFixed": {
+        "post": [[ index, 'desc' ], [2 , 'asc' ]]
+    }
     } );
 });
 
