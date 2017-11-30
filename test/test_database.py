@@ -124,6 +124,13 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(db.get_search_name('Daniele Braga'), (0, 30, 20, 10, 0, 0, 43, 14, 0, 0))
         self.assertEqual(db.get_search_name('Piero Fraternali'), (0, 49, 29, 18, 1, 1, 49, 0, 7, 0))
 
+    def test_get_detail_information_by_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        self.assertEqual(db.get_detail_information_by_author('aaa'), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        self.assertEqual(db.get_detail_information_by_author('Carole A. Goble'), (199, 115, 79, 5, 0, 405, 17, 72, 7, 10, 42, 4, 6, 27, 2, 0, 0, 0, 1, 3, 1))
+
+
     def test_get_average_publications_per_author_by_year(self):
         db = database.Database()
         self.assertTrue(db.read(path.join(self.data_dir, "simple.xml")))
