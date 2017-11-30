@@ -129,6 +129,28 @@ class Database:
         data = [ func(ystats[:, i]) for i in np.arange(4) ] + [ func(ystats.sum(axis=1)) ]
         return (header, data)
 
+    def get_author_publication(self, pub_type):
+        header = ("Author", "Number of sole author", "Number of first author", "Number of last author")
+        astats = [[0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
+        for p in self.publications:
+            if (pub_type == 4 or pub_type == p.pub_type):
+                for a in p.authors:
+
+                    astats[a][p.pub_type] += 1
+
+                    if a == p.authors[0] and len(p.authors) == 1:
+                        astats[a][4] += 1
+                    elif a == p.authors[0]:
+                        astats[a][5] += 1
+                    elif a == p.authors[-1]:
+                        astats[a][6] += 1
+        data = [[self.authors[i].name] + astats[i][4:7]
+                for i in range(len(astats))]
+
+        return (header, data)
+
+
+
     def get_average_authors_in_a_year(self, av):
         header = ("Conference Paper","Conference Paper",
             "Journal", "Book", "Book Chapter", "All Publications")
