@@ -214,3 +214,52 @@ def showAuthorDetails():
     args["book_chapters_solo"] = book_chapters_solo
 
     return render_template("author_details.html", args=args)
+
+@app.route("/fuzzy_search_name")
+def showFuzzySearchName():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"fuzzy_search_name"}
+    args["title"] = "fuzzy search author"
+    author = str(request.args.get("author")).decode('utf-8')
+    author_names=[]
+    if author == 'None':
+        pass
+    else:
+        author_names = db.get_fuzzy_search_name(author)
+        author_names.sort()
+    authors = []
+
+    if len(author_names) > 1:
+        for author in author_names:
+            authors.append(author)
+        args["authors"] = authors
+        return render_template("search_name_link.html", args=args)
+
+    elif len(author_names) == 1:
+        a = author_names[0]
+        error_message, allpublications, conference_papers, journal_articles, book_chapters, books, co_authors, first, last,sole = db.get_search_name(a)
+        args["author"] = a
+        args["allpublications"] = allpublications
+        args["conference_papers"] = conference_papers
+        args["journal_articles"] = journal_articles
+        args["book_chapters"] = book_chapters
+        args["books"] = books
+        args["co_authors"] = co_authors
+        args["first"] = first
+        args["last"] = last
+        args["sole"] = sole
+        return render_template("search_name_link.html", args=args)
+
+    elif len(author_names) == 0:
+        args["author"]= 'None result returned for ' + author + '. Please check the name and try again!'
+        args["allpublications"] = 'NULL'
+        args["conference_papers"] = 'NULL'
+        args["journal_articles"] = 'NULL'
+        args["book_chapters"] = 'NULL'
+        args["books"] = 'NULL'
+        args["co_authors"] = 'NULL'
+        args["first"] = 'NULL'
+        args["last"] = 'NULL'
+        args["sole"] = 'NULL'
+        return render_template("fuzzy_search_name.html", args=args)
