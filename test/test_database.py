@@ -238,6 +238,18 @@ class TestDatabase(unittest.TestCase):
         header, data = db.get_author_publication(4)
         self.assertEqual(data[0][-1], 25, "incorrect number of last author1 in all publications")
 
+    def test_get_fuzzy_search_name(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        # Test an author that does not exist in database
+        self.assertEqual(db.get_search_name(db.get_fuzzy_search_name('aaa')),('The author you entered does not exist in database', 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        # Test an author that is the only searching results
+        author_names = db.get_fuzzy_search_name('Richard Cooper')
+        self.assertEqual(db.get_search_name(author_names[0]), (0, 6, 4, 2, 0, 0, 11, 1, 0, 0))
+        # Test an author was part of a name and matches several authors in database
+        author_names=db.get_fuzzy_search_name('Daniele')
+        author_names.sort()
+        self.assertEqual(db.get_search_name(author_names[0]), (0, 30, 20, 10, 0, 0, 43, 14, 0, 0))
 if __name__ == '__main__':
     unittest.main()
 
