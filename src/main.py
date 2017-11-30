@@ -23,4 +23,4 @@ if "DEBUG" in os.environ:
 if "TESTING" in os.environ:
     app.config['TESTING'] = True
 
-app.run(host='0.0.0.0', port=9292)
+app.run(host='localhost', port=9292)

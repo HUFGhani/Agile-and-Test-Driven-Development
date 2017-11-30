@@ -267,6 +267,34 @@ class Database:
         data = [ [y] + ystats[y] + [sum(ystats[y])] for y in ystats ]
         return (header, data)
 
+    def get_fuzzy_search_name(self,author):
+        author_names=[]
+        if author is not None:
+            for a in self.authors:
+                #print(author)
+                if author.lower() in a.name.lower():
+                   author_names.append(a.name)
+
+        return author_names
+    # def get_fuzzy_search_name(self,author):
+    #     author_names=[]
+    #     astats = [[0, 0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
+    #     data = [astats[i] for i in range(len(astats))]
+    #     for i in range(len(data)):
+    #         n= i.authors.name
+    #         if  author.lower() in n.lower():
+    #             author_names.append(self.authors[i].name)
+    #     return author_names
+
+    # def get_fuzzy_search_name(self, author):
+    #     author_names = []
+    #     for p in self.publications:
+    #         for a in p.authors:
+    #             name = self.authors[a].name
+    #             if author.lower() in name.lower():
+    #                 author_names.append(name)
+    #     return author_names
+
     def get_search_name(self,author):
         allpublications=0
         conference_papers=0
@@ -276,18 +304,27 @@ class Database:
         co_authors=0
         first=0
         last=0
+        sole=0
         error_message=0
 
-        astats = [[0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
+        astats = [[0, 0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
         coauthors = {}
         for p in self.publications:
             for a in p.authors:
                 astats[a][p.pub_type+1] += 1
+                # if a == p.authors[0] and len(p.authors)==1:
+                #     astats[a][8] += 1
+                # if a == p.authors[0] and len(p.authors)!=1:
+                #     astats[a][6] += 1
+                # if a == p.authors[-1] and len(p.authors)!=1:
+                #     astats[a][7] += 1
 
-                if a == p.authors[0]:
+                if a == p.authors[0] and len(p.authors) != 1:
                     astats[a][6] += 1
-                if a == p.authors[-1]:
+                elif a == p.authors[-1] and len(p.authors) != 1:
                     astats[a][7] += 1
+                elif a == p.authors[0] and len(p.authors) == 1:
+                   astats[a][8] += 1
 
                 for a2 in p.authors:
                     if a != a2:
@@ -306,17 +343,18 @@ class Database:
                 allpublications = data[i][0]
                 conference_papers = data[i][1]
                 journal_articles = data[i][2]
-                book_chapters = data[i][3]
-                books = data[i][4]
+                books = data[i][3]
+                book_chapters = data[i][4]
                 co_authors = data[i][5]
                 first = data[i][6]
                 last = data[i][7]
+                sole = data[i][8]
                 error_message = 0
                 break
             else:
                 error_message = 'The author you entered does not exist in database'
 
-        return (error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last)
+        return (error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last,sole)
 
     def get_average_publications_per_author_by_year(self, av):
         header = ("Year","Year", "Conference papers",

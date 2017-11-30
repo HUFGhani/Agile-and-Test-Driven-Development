@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<h1>{{ args.title }}</h1>
+<table class="sortable">
+
+{% if  args.authors %}
+<thead>
+<tr>
+  <!--<th>Choose from:</th>-->
+Choose from:
+</tr>
+</thead>
+<tbody>
+{% for row in args.authors %}
+  <tr>
+      <td><a href="/fuzzy_search_name?author={{ row }}">Stats for {{ row }}</a></td>
+   </tr>
+{% endfor %}
+</tbody>
+{%endif%}
+
+{% if  args.author %}
+<thead>
+<tr>
+  <th>Author</th>
+    <th>All publications</th>
+    <th>Num of conference papers</th>
+    <th>Num of journal articles</th>
+    <th>Num of book chapters</th>
+    <th>Num of books</th>
+    <th>Num of coauthors</th>
+    <th>Num of first author</th>
+    <th>Num of last author</th>
+    <th>Num of sole author</th>
+</tr>
+</thead>
+<tbody>
+
+  <tr>
+    <td>{{ args.author }}</td>
+      <td>{{ args.allpublications }}</td>
+      <td>{{ args.conference_papers }}</td>
+      <td>{{ args.journal_articles  }}</td>
+      <td>{{ args.book_chapters }}</td>
+      <td>{{ args.books}}</td>
+      <td>{{ args.co_authors }}</td>
+      <td>{{ args.first}}</td>
+      <td>{{ args.last}}</td>
+      <td>{{ args.sole}}</td>
+   </tr>
+
+</tbody>
+{%endif%}
+</table>
+{% endblock %}
