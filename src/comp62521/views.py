@@ -118,10 +118,6 @@ def showPublicationSummary(status):
 
     return render_template('statistics_details.html', args=args)
 
-
-
-
-
 @app.route("/search_name")
 def showSerchName():
     dataset = app.config['DATASET']
@@ -151,9 +147,7 @@ def showSerchName():
         args["first"] = first
         args["last"] = last
 
-    return render_template("serch_name.html", args=args)
-
-
+    return render_template("search_name.html", args=args)
 
 @app.route("/search_type")
 def showAuthorsPublication():
@@ -174,3 +168,49 @@ def showAuthorsPublication():
 
     args["pub_str"] = PUB_TYPES[pub_type]
     return render_template("search_type.html", args=args)
+
+@app.route("/author_details")
+def showAuthorDetails():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"author_details"}
+    args["title"] = "Author Details"
+    author = str(request.args.get("author"))
+    (allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,
+     allpublications_first,allpublications_last,allpublications_solo,
+     conference_papers_first,conference_papers_last,conference_papers_solo,
+     journal_articles_first,journal_articles_last,journal_articles_solo,
+     books_first,books_last,books_solo,
+     book_chapters_first,book_chapters_last,book_chapters_solo) = db.get_detail_information_by_author(author)
+
+    args["author"] = author
+
+    args["allpublications"] = allpublications
+    args["conference_papers"] = conference_papers
+    args["journal_articles"] = journal_articles
+    args["books"] = books
+    args["book_chapters"] = book_chapters
+
+    args["co_authors"] = co_authors
+
+    args["allpublications_first"] = allpublications_first
+    args["allpublications_last"] = allpublications_last
+    args["allpublications_solo"] = allpublications_solo
+
+    args["conference_papers_first"] = conference_papers_first
+    args["conference_papers_last"] = conference_papers_last
+    args["conference_papers_solo"] = conference_papers_solo
+
+    args["journal_articles_first"] = journal_articles_first
+    args["journal_articles_last"] = journal_articles_last
+    args["journal_articles_solo"] = journal_articles_solo
+
+    args["books_first"] = books_first
+    args["books_last"] = books_last
+    args["books_solo"] = books_solo
+
+    args["book_chapters_first"] = book_chapters_first
+    args["book_chapters_last"] = book_chapters_last
+    args["book_chapters_solo"] = book_chapters_solo
+
+    return render_template("author_details.html", args=args)

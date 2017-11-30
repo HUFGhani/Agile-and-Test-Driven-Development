@@ -241,9 +241,9 @@ class Database:
             for a in p.authors:
                 astats[a][p.pub_type] += 1
                 
-                if a == p.authors[0]:
+                if a == p.authors[0]and len(p.authors) != 1:
                     astats[a][4] += 1
-                if a == p.authors[-1]:
+                if a == p.authors[-1]and len(p.authors) != 1:
                     astats[a][5] += 1
                 if a == p.authors[0] and len(p.authors) == 1:
                     astats[a][6] += 1
@@ -339,6 +339,134 @@ class Database:
                 error_message = 'The author you entered does not exist in database'
 
         return (error_message,allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,first,last)
+
+    def get_detail_information_by_author(self,author):
+        allpublications = 0 #a [0]
+        conference_papers = 0 #a [1]
+        journal_articles = 0 #a [2]
+        books = 0 #a [3]
+        book_chapters = 0 #a [4]
+
+        co_authors=0 #a [5]
+
+        allpublications_first = 0 #a [6]
+        allpublications_last = 0 #a [7]
+        allpublications_solo = 0 #a [8]
+
+        conference_papers_first = 0 #a [9]
+        conference_papers_last = 0 #a [10]
+        conference_papers_solo = 0 #a [11]
+
+        journal_articles_first = 0 #a [12]
+        journal_articles_last = 0 #a [13]
+        journal_articles_solo = 0 #a [14]
+
+        books_first = 0 #a [15]
+        books_last = 0 #a [16]
+        books_solo = 0 #a [17]
+
+        book_chapters_first = 0 #a [18]
+        book_chapters_last = 0 #a [19]
+        book_chapters_solo = 0 #a [20]
+
+
+        astats = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
+        coauthors = {}
+        for p in self.publications:
+            for a in p.authors:
+                astats[a][p.pub_type+1] += 1
+
+                astats[a][0]=sum(astats[a][1:5])
+
+                for a2 in p.authors:
+                    if a != a2:
+                        try:
+                            coauthors[a].add(a2)
+                        except KeyError:
+                            coauthors[a] = set([a2])
+                astats[a][5]=len(coauthors[a])
+
+                if a == p.authors[0] and len(p.authors) != 1:
+                    astats[a][6] += 1
+                if a == p.authors[-1] and len(p.authors) != 1:
+                    astats[a][7] += 1
+                if a == p.authors[0] and len(p.authors) == 1:
+                    astats[a][8] += 1
+
+                #Journal ArticalsS
+                if p.pub_type == 1:
+                    if a == p.authors[0] and len(p.authors) != 1:
+                        astats[a][12] += 1
+                    if a == p.authors[-1] and len(p.authors) != 1:
+                        astats[a][13] += 1
+                    if a == p.authors[0] and len(p.authors) == 1:
+                        astats[a][14] += 1
+
+                #Conference Papers
+                if p.pub_type == 0:
+                    if a == p.authors[0] and len(p.authors) != 1:
+                        astats[a][9] += 1
+                    if a == p.authors[-1] and len(p.authors) != 1:
+                        astats[a][10] += 1
+                    if a == p.authors[0] and len(p.authors) == 1:
+                        astats[a][11] += 1
+
+                #Book
+                if p.pub_type == 2:
+                    if a == p.authors[0] and len(p.authors) != 1:
+                        astats[a][15] += 1
+                    if a == p.authors[-1] and len(p.authors) != 1:
+                        astats[a][16] += 1
+                    if a == p.authors[0] and len(p.authors) == 1:
+                        astats[a][17] += 1
+                           
+                #Book chapter
+                if p.pub_type == 3:
+                    if a == p.authors[0] and len(p.authors) != 1:
+                        astats[a][18] += 1
+                    if a == p.authors[-1] and len(p.authors) != 1:
+                        astats[a][19] += 1
+                    if a == p.authors[0] and len(p.authors) == 1:
+                        astats[a][20] += 1
+
+
+
+        data=[ astats[i] for i in range(len(astats))]
+        for i in range(len(data)):
+            if author == self.authors[i].name:
+                allpublications = data[i][0]
+                conference_papers = data[i][1]
+                journal_articles = data[i][2]
+                books = data[i][3]
+                book_chapters = data[i][4]
+                co_authors = data[i][5]
+
+                allpublications_first = data[i][6]
+                allpublications_last = data[i][7]
+                allpublications_solo = data[i][8]
+
+                conference_papers_first = data[i][9]
+                conference_papers_last = data[i][10]
+                conference_papers_solo = data[i][11]
+
+                journal_articles_first = data[i][12]
+                journal_articles_last = data[i][13]
+                journal_articles_solo = data[i][14]
+
+                books_first = data[i][15]
+                books_last = data[i][16]
+                books_solo = data[i][17]
+
+                book_chapters_first = data[i][18]
+                book_chapters_last = data[i][19]
+                book_chapters_solo = data[i][20]
+
+        return (allpublications,conference_papers,journal_articles,book_chapters,books,co_authors,
+                allpublications_first,allpublications_last,allpublications_solo,
+                conference_papers_first,conference_papers_last,conference_papers_solo,
+                journal_articles_first,journal_articles_last,journal_articles_solo,
+                books_first,books_last,books_solo,
+                book_chapters_first,book_chapters_last,book_chapters_solo)
 
     def get_average_publications_per_author_by_year(self, av):
         header = ("Year","Year", "Conference papers",
