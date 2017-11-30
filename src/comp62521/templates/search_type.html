@@ -32,7 +32,8 @@ Publication type:
   <tbody>
   {% for row in args.data[1] %}
     <tr>
-    {% for data_item in row %}
+     <td><a href="/author_details?author={{ row[0] }}">{{ row[0] }}</a></td>
+    {% for data_item in row[1:] %}
       <td>{{ data_item }}</td>
     {% endfor %}
     </tr>
