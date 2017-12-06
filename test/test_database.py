@@ -258,6 +258,12 @@ class TestDatabase(unittest.TestCase):
         author_names.sort()
         self.assertEqual(db.get_search_name(author_names[0]), (0, 30, 20, 10, 0, 0, 43, 14, 0, 0))
 
+    def test_get_degree_of_separation(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR1','AUTHOR2'),(0))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR3','AUTHOR4'),(1))
+
 if __name__ == '__main__':
     unittest.main()
 
