@@ -1,7 +1,9 @@
 from comp62521.statistics import average
 import itertools
 import numpy as np
+import networkx as nx
 from xml.sax import handler, make_parser, SAXException
+
 
 PublicationType = [
     "Conference Paper", "Journal", "Book", "Book Chapter"]
@@ -293,29 +295,10 @@ class Database:
         author_names=[]
         if author is not None:
             for a in self.authors:
-                #print(author)
                 if author.lower() in a.name.lower():
                    author_names.append(a.name)
 
         return author_names
-    # def get_fuzzy_search_name(self,author):
-    #     author_names=[]
-    #     astats = [[0, 0, 0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
-    #     data = [astats[i] for i in range(len(astats))]
-    #     for i in range(len(data)):
-    #         n= i.authors.name
-    #         if  author.lower() in n.lower():
-    #             author_names.append(self.authors[i].name)
-    #     return author_names
-
-    # def get_fuzzy_search_name(self, author):
-    #     author_names = []
-    #     for p in self.publications:
-    #         for a in p.authors:
-    #             name = self.authors[a].name
-    #             if author.lower() in name.lower():
-    #                 author_names.append(name)
-    #     return author_names
 
     def get_search_name(self,author):
         allpublications=0
@@ -334,12 +317,6 @@ class Database:
         for p in self.publications:
             for a in p.authors:
                 astats[a][p.pub_type+1] += 1
-                # if a == p.authors[0] and len(p.authors)==1:
-                #     astats[a][8] += 1
-                # if a == p.authors[0] and len(p.authors)!=1:
-                #     astats[a][6] += 1
-                # if a == p.authors[-1] and len(p.authors)!=1:
-                #     astats[a][7] += 1
 
                 if a == p.authors[0] and len(p.authors) != 1:
                     astats[a][6] += 1
@@ -595,18 +572,60 @@ class Database:
         return [ (self.authors[key].name, data[key])
             for key in data ]
 
-    def get_network_data(self):
-        na = len(self.authors)
+    def get_coauthor(self, authorname):
+        if authorname in self.author_idx:
+            author_id = self.author_idx[authorname]
+            data = self._get_collaborations(author_id, True)
+            coauthors = [self.authors[item].name for item in data]
+            coauthors.remove(authorname)
+            return coauthors
+        return None
 
-        nodes = [ [self.authors[i].name, -1] for i in range(na) ]
-        links = set()
-        for a in range(na):
-            collab = self._get_collaborations(a, False)
-            nodes[a][1] = len(collab)
-            for a2 in collab:
-                if a < a2:
-                    links.add((a, a2))
-        return (nodes, links)
+    def convert_to_graph(self, data):
+        graph = nx.Graph()
+        for item in data:
+            for i in range(len(item)):
+                for j in range(len(item)):
+                    if i != j:
+                        graph.add_edge(item[i], item[j])
+        return graph
+
+    def degree_of_separation(self, graph, start, end):
+        path = nx.all_pairs_shortest_path(graph)
+        try:
+            degree = len(path[start][end]) - 2
+        except KeyError:
+            degree = 'X'
+        return degree
+
+    def get_degree_of_separation(self, author1, author2):
+        all_authors = [a.name for a in self.authors]
+        if author1 in all_authors and author2 in all_authors:
+            coauthors = [p.authors for p in self.publications]
+            graph = self.convert_to_graph(coauthors)
+            degree = self.degree_of_separation(graph, all_authors.index(author1), all_authors.index(author2))
+            return degree
+        return None
+
+    def show_all_shortest_paths(self, author1, author2):
+        all_authors = [a.name for a in self.authors]
+        if author1 in all_authors and author2 in all_authors:
+            coauthors = [p.authors for p in self.publications]
+            graph = self.convert_to_graph(coauthors)
+            paths = self.all_shortest_paths(graph, all_authors.index(author1), all_authors.index(author2))
+            result = []
+            for path in paths:
+                result.append([all_authors[p] for p in path])
+            return result
+        return None
+
+    def all_shortest_paths(self, graph, start, end):
+        path = nx.all_shortest_paths(graph, start, end)
+        try:
+            path = list(path)
+        except nx.exception.NetworkXNoPath:
+            path = []
+        return path
 
 class DocumentHandler(handler.ContentHandler):
     TITLE_TAGS = [ "sub", "sup", "i", "tt", "ref" ]

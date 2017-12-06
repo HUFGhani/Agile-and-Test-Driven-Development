@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
 {% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.8.5/echarts.min.js"></script>
 <style>
 table#details{
     width: 100%;    
@@ -16,6 +17,9 @@ Insert name: <input type="text" name="author" value="">
 
 
 <input type="submit" value="Submit" ><br>
+
+</form>
+
 search result = {{args.author}}<br>
     <table id="details">
         <tr>
@@ -41,7 +45,7 @@ search result = {{args.author}}<br>
             <th>Journal Articles First</th>
             <th>Books First</th>
             <th>Book Chapters First</th>
-        </tr>
+        </tr><div id="main" style="height:600px;" class="col-md-12"></div>
         <tr>
             <td>{{ args.allpublications_first }}</td>
             <td>{{ args.conference_papers_first }}</td>
@@ -86,20 +90,53 @@ search result = {{args.author}}<br>
     </table>
 
 Co-authors = {{ args.co_authors }}<br>
-</form>
 
+<div id="main" style="height:600px;" class="col-md-12"></div>
 
-<script>
-function validateForm(form){
-  author = form["author"].value;
-  if (author==""){
-    alert("Please input author's name");
-    return false;
-  }
-  return true;
-}
-
+<script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.showLoading();
+        $.get("{{ url_for('getCoauthor', authorname=args.author)}}", function (webkitDep) {
+            myChart.hideLoading();
+            option = {
+            animationDuration: 3000,
+            animationEasingUpdate: 'quinticInOut',
+            series: [{
+                type: 'graph',
+                layout: 'force',
+                label: {
+                    normal: {
+                        position: 'top',
+                        show: true
+                    }
+                },
+                draggable: true,
+                data: webkitDep.nodes.map(function (node, idx) {
+                    node.id = idx;
+                    return node;
+                }),
+                categories: webkitDep.categories,
+                force: {
+                    edgeLength: 200,
+                    repulsion: 300,
+                    gravity: 0.2
+                },
+                edges: webkitDep.links,
+                focusNodeAdjacency: true,
+                roam: true,
+                lineStyle: {
+                    normal: {
+                        color: 'source',
+                        curveness: 0,
+                        type: "solid"
+                    }
+                }
+            }]
+        };
+            myChart.setOption(option);
+        });
 </script>
+
 
 
 {% endblock %}

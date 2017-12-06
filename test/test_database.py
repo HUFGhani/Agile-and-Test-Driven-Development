@@ -1,5 +1,6 @@
 from os import path
 import unittest
+import networkx as nx
 
 from comp62521.database import database
 
@@ -257,6 +258,18 @@ class TestDatabase(unittest.TestCase):
         author_names=db.get_fuzzy_search_name('Daniele')
         author_names.sort()
         self.assertEqual(db.get_search_name(author_names[0]), (0, 30, 20, 10, 0, 0, 43, 14, 0, 0))
+
+    def test_get_degree_of_separation(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR1','AUTHOR2'),(0))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR3','AUTHOR4'),(1))
+
+    def test_show_all_shortest_paths(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        self.assertEqual(db.show_all_shortest_paths('AUTHOR1','AUTHOR2'),[[u'AUTHOR1', u'AUTHOR2']])
+        self.assertEqual(db.show_all_shortest_paths('AUTHOR3','AUTHOR4'),[[u'AUTHOR3', u'AUTHOR1', u'AUTHOR4'], [u'AUTHOR3', u'AUTHOR2', u'AUTHOR4']])
 
 if __name__ == '__main__':
     unittest.main()
