@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item active"> {{ args.title }}</li>
+{% endblock %}
 {% block content %}
 <h1>{{ args.title }}</h1>
 
@@ -21,7 +25,7 @@ Publication type:
 
 <h1>{{ args.pub_str }} in {{ args.start_year }} {% if args.start_year != args.end_year %} - {{ args.end_year }}{% endif %}</h1>
 
-<table class="sortable">
+<table id="example" class="table table-striped table-bordered">
   <thead>
     <tr>
     {% for column in args.data[0] %}

@@ -3,6 +3,7 @@ from database import database
 from flask import (render_template, request, url_for, redirect, jsonify)
 import json
 
+
 def format_data(data):
     fmt = "%.2f"
     result = []

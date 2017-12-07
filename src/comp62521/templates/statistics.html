@@ -4,20 +4,47 @@
 {% block head %}
   {{ super() }}
 {% endblock %}
-
+{% block breadcrumb %}
+    <li class="breadcrumb-item active"> Home</li>
+{% endblock %}
 {% block content %}
-<ul>
-  <li><a href="/statisticsdetails/publication_summary">Publication Summary</a></li>
-  <li><a href="/statisticsdetails/publication_author">Publication by Author</a></li>
-  <li><a href="/statisticsdetails/publication_year">Publication by Year</a></li>
-  <li><a href="/statisticsdetails/author_year">Author by Year</a></li>
-  <li><a href="/averages">Averaged Year Data</a></li>
-  <li><a href="/coauthors">Co-Authors</a></li>
-  <li><a href="/search_name">Search</a></li>
-  <li><a href="/search_type">Search Author by Publication Type</a></li>
-  <li><a href="/author_details">Author Details</a></li>
-  <li><a href="/fuzzy_search_name">Fuzzy Search Author</a></li> 
-  <li><a href="/separation">Author Separation</a></li>
-</ul>
+    <br>
+    <div class="main">
+  <div class="row">
+    <div class="col">
+      <a href="/statisticsdetails/publication_summary">Publication Summary</a>
+    </div>
+    <div class="col">
+     <a href="/statisticsdetails/publication_author">Publication by Author</a>
+    </div>
+      <div class="col">
+    <a href="/statisticsdetails/publication_year">Publication by Year</a>
+    </div>
+        <div class="col">
+   <a href="/statisticsdetails/author_year">Author by Year</a>
+    </div>
+          <div class="col">
+   <a href="/averages">Averaged Year Data</a>
+    </div>
+  </div>
+    <hr>
+  <div class="row">
+    <div class="col">
+     <a href="/coauthors">Co-Authors</a>
+    </div>
+    <div class="col">
+     <a href="/search_name">Search</a>
+    </div>
+    <div class="col">
+     <a href="/search_type">Search Author by Publication Type</a>
+    </div>
+  <div class="col">
+      <a href="/author_details">Author Details</a>
+    </div>
+    <div class="col">
+     <a href="/fuzzy_search_name">Fuzzy Search Author</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
 

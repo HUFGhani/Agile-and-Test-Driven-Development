@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ args.title }}{% endblock %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item active"> {{ args.title }}</li>
+{% endblock %}
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.8.5/echarts.min.js"></script>
 <style>
