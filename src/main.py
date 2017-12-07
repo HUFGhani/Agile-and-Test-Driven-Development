@@ -16,6 +16,7 @@ else:
 
 app.config['DATASET'] = dataset
 app.config['DATABASE'] = db
+app.config['DEBUG'] = True
 
 if "DEBUG" in os.environ:
     app.config['DEBUG'] = True

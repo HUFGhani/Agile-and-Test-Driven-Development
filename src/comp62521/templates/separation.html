@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ args.title }}{% endblock %}
+{% block content %}
+<h1>{{ args.title }}</h1>
+<br/>
+<script type="text/javascript" src="../static/js/springy.js"></script>
+<script type="text/javascript" src="../static/js/springyui.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<form name="input" action="/separation" method="get" data-ajax="false" >
+    <label>author name1:</label>
+    <select name="author1" class="select2 col-md-2">
+        {% for author in args.authors %}
+        <option value="{{ author }}" {{ "selected" if author == args.author1 else ''}}>{{ author }}</option>
+        {% endfor %}
+    </select>
+    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author name2:</label>
+    <select name="author2" class="select2 col-md-2" >
+        {% for author in args.authors %}
+        <option value="{{ author }}" {{ "selected" if author == args.author2 else ''}}>{{ author }}</option>
+        {% endfor %}
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="submit" class="btn btn-sm">submit</button>
+</form>
+<br/>
+{% if args.degrees %}
+<h3>Results</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Author 1</th>
+        <th>Author 2</th>
+        <th>Degrees of separation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for item in args.degrees %}
+        <td width="20%">{{ item }}</td>
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+<br/>
+<canvas id="graph" width="800px" height="500px" />
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+<script>
+    var graphJSON = {
+        "nodes": {{ args.nodes|safe }},
+        "edges": {{ args.edges|safe }}
+    };
+
+    jQuery(function(){
+        var graph = new Springy.Graph();
+        graph.loadJSON(graphJSON);
+
+        var springy = $('#graph').springy({
+            graph: graph
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 from comp62521 import app
 from database import database
-from flask import (render_template, request)
+from flask import (render_template, request, url_for, redirect, jsonify)
+import json
 
 def format_data(data):
     fmt = "%.2f"
@@ -215,6 +216,18 @@ def showAuthorDetails():
 
     return render_template("author_details.html", args=args)
 
+@app.route("/getcoauthor/<authorname>")
+def getCoauthor(authorname):
+    db = app.config['DATABASE']
+    coauthor = db.get_coauthor(authorname)
+    data = {"type": "force", "categories": [{"name": "author"}, {"name": "coauthor"}]}
+    nodes = [{"name": authorname, "category": "author", "symbolSize": 30}] + \
+            [{"name": name, "category": "coauthor", "symbolSize": 20} for name in coauthor]
+    links = [{"source": 0, "target": i+1} for i in range(len(nodes)-1)]
+    data["nodes"] = nodes
+    data["links"] = links
+    return jsonify(data)
+
 @app.route("/fuzzy_search_name")
 def showFuzzySearchName():
     dataset = app.config['DATASET']
@@ -263,3 +276,29 @@ def showFuzzySearchName():
         args["last"] = 'NULL'
         args["sole"] = 'NULL'
         return render_template("fuzzy_search_name.html", args=args)
+
+@app.route("/separation")
+def degreeOfSeparation():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset, "id":"degreeofseparation"}
+    args["title"] = "Degrees of Separation"
+    args["authors"] = db.get_all_authors()
+    if "author1" in request.args and "author2" in request.args:
+        author1 = request.args.get("author1").strip()
+        author2 = request.args.get("author2").strip()
+        args["degrees"] = [author1, author2, db.get_degree_of_separation(author1, author2)]
+        args["author1"] = author1
+        args["author2"] = author2
+        paths = db.show_all_shortest_paths(author1, author2)
+        nodes = set()
+        edges = []
+        for path in paths:
+            for p in path:
+                nodes.add(p)
+            for i in range(0, len(path)-1):
+                if [path[i], path[i+1]] not in edges:
+                    edges.append([path[i], path[i+1]])
+        args["nodes"] = json.dumps(list(nodes))
+        args["edges"] = json.dumps(edges)
+    return render_template("separation.html", args=args)

@@ -1,5 +1,6 @@
 from os import path
 import unittest
+import networkx as nx
 
 from comp62521.database import database
 
