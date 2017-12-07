@@ -18,9 +18,6 @@ $(document).ready(function() {
             },
         ],
         // "order": [ index, "asc" ]
-        "orderFixed": {
-        "post": [[ index, 'desc' ], [2 , 'asc' ]]
-    }
     } );
 });
 

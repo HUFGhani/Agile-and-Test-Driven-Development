@@ -6,7 +6,7 @@ from xml.sax import handler, make_parser, SAXException
 
 
 PublicationType = [
-    "Conference Paper", "Journal", "Book", "Book Chapter"]
+    "Conference Paper","Conference Paper", "Journal", "Book", "Book Chapter"]
 
 class Publication:
     CONFERENCE_PAPER = 0
@@ -132,7 +132,7 @@ class Database:
         return (header, data)
 
     def get_author_publication(self, pub_type):
-        header = ("Author", "Number of sole author", "Number of first author", "Number of last author")
+        header = ("Author","Author", "Number of sole author", "Number of first author", "Number of last author")
         astats = [[0, 0, 0, 0, 0, 0, 0] for _ in range(len(self.authors))]
         for p in self.publications:
             if (pub_type == 4 or pub_type == p.pub_type):

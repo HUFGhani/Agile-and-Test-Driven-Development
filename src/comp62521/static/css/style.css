@@ -1,0 +1,22 @@
+body{
+     background-color: #673ab7;
+}
+#example{
+    background: aliceblue;
+}
+#container{
+    z-index: -1;
+     background: aliceblue;
+
+}
+
+#page{
+    background: aliceblue;
+}
+
+#header > h1{
+    text-align: center;
+}
+#header > ol{
+     background: aliceblue;
+}
