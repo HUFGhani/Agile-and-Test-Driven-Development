@@ -264,6 +264,12 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(db.show_all_shortest_paths('AUTHOR1','AUTHOR2'),[[u'AUTHOR1', u'AUTHOR2']])
         self.assertEqual(db.show_all_shortest_paths('AUTHOR3','AUTHOR4'),[[u'AUTHOR3', u'AUTHOR1', u'AUTHOR4'], [u'AUTHOR3', u'AUTHOR2', u'AUTHOR4']])
 
+    def test_get_degree_of_separation(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR1','AUTHOR2'),(0))
+        self.assertEqual(db.get_degree_of_separation('AUTHOR3','AUTHOR4'),(1))
+
 if __name__ == '__main__':
     unittest.main()
 
